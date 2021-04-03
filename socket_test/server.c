@@ -1,17 +1,7 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<unistd.h>
-#include<sys/socket.h>
-#include<arpa/inet.h>
-#include<ctype.h>
+#include"wrap.h"
 
 #define SERVER_PORT 9527
 
-void sys_err(const char* str){
-		perror(str);
-			exit(1);
-}
 
 int main(int argc,char *argv[]){ 
 
@@ -25,20 +15,18 @@ int main(int argc,char *argv[]){
 	server_addr.sin_addr.s_addr = htonl(INADDR_ANY); //INADDR_ANY 表示取的一个可用的主机地址
 	server_addr.sin_port = htons(SERVER_PORT);	//注意port是 short,否则客户端将连不上！！
 	
-	lfd = socket(AF_INET,SOCK_STREAM,0);
-	if(lfd==-1) sys_err("soket err\n");
+	lfd = Socket(AF_INET,SOCK_STREAM,0);
 
-	bind(lfd,(struct sockaddr *)&server_addr,sizeof(server_addr)); //绑定addr，socket，addrlen
+	Bind(lfd,(struct sockaddr *)&server_addr,sizeof(server_addr)); //绑定addr，socket，addrlen
 
-	listen(lfd,128);	//socket, backlog(max connections) 
+	Listen(lfd,128);	//socket, backlog(max connections) 
 	
 	socklen_t client_addr_len;			//客户端地址长度
 	client_addr_len = sizeof(client_addr);
 	
 	//注意cfd是server的缓存socket 不是client的
-	cfd = accept(lfd,(struct sockaddr *)&client_addr,&client_addr_len);//第二个是传出参数
-	if(cfd == -1) sys_err("accept err\n");
-	
+	cfd = Accept(lfd,(struct sockaddr *)&client_addr,&client_addr_len);//第二个是传出参数
+
 	printf("client ip is %s   port is %d\n",
 	inet_ntop(AF_INET,&client_addr.sin_addr.s_addr,client_IP,sizeof(client_IP)),
 	ntohs(client_addr.sin_port));
