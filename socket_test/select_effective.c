@@ -39,6 +39,8 @@ int main(int argc,char *argv[]){
 
 	fd_set allset,rset;
 	FD_ZERO(&allset);		//清零
+	//内核其实已经记录了所有的就绪事件
+	//是我们额外增加一个数组复制了一份就绪事件集合来提高效率
 	FD_SET(lfd,&allset);	//添加
 	
 	socklen_t client_len = sizeof(client_addr);
