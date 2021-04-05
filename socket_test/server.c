@@ -17,6 +17,10 @@ int main(int argc,char *argv[]){
 	
 	lfd = Socket(AF_INET,SOCK_STREAM,0);
 
+	//设置端口可重用, 还是会等待2MSL 
+	int opt =1;
+	setsockopt(lfd,SOL_SOCKET,SO_REUSEADDR,(void *)&opt,sizeof(opt));
+
 	Bind(lfd,(struct sockaddr *)&server_addr,sizeof(server_addr)); //绑定addr，socket，addrlen
 
 	Listen(lfd,128);	//socket, backlog(max connections) 
