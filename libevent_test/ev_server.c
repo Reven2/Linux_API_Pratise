@@ -50,18 +50,6 @@ void event_cb(struct bufferevent *bev, short events, void *arg)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 //监听回调,看笔记上有这个函数的参数的解释，且这个函数是满足条件时系统自动帮我们调用
 void cb_listener(struct evconnlistener* listener,
 				 evutil_socket_t fd,
