@@ -24,7 +24,6 @@ void *producer(void* arg){
 	return NULL;
 }
 
-
 void *consumer(void* arg){
 	
 	int i = 0;
@@ -40,12 +39,6 @@ void *consumer(void* arg){
 	}
 	return NULL;
 }
-
-
-
-
-
-
 
 int main(int argc, char**argv){
 

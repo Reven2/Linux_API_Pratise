@@ -9,6 +9,8 @@
 void isFile(char *name);
 
 
+//void read_dir(char *dir,void (*fcn)(char *path))
+
 void read_dir(char *dir){
     
     char path[257];         //文件名称最长为256字节，但sprintf要求多大一个 不然会报警告
@@ -18,15 +20,20 @@ void read_dir(char *dir){
         perror("opendir error");
         return;
     }
-    //读取目录项
+    //读取目录项 he
     while((sdp = readdir(dp))!= NULL){  //读目录
+
+		//很多条件判断 例如文件名/目录名最长 256 Byte,这里就不写了
+		//以下判断防止无线递归 因为每个目录下都有. ..目录
         if(strcmp(sdp->d_name,".") == 0  || strcmp(sdp->d_name,"..") ==0){
             continue;
         } 
-        // 目录/目录项 以这样的形式拼接成新的目录
+		
+        //int sprintf(char *buffer, const char *format, ...)
+		//Writes the results to a character string buffer
         sprintf(path,"%s/%s",dir,sdp->d_name);  //拿到当前读到的d_name拼接当前目录
         isFile(path);           //传入路径判断是否为文件
-    
+    	//(*fcn)(path);		//回调函数写法
     }
 
     closedir(dp);
@@ -34,13 +41,13 @@ void read_dir(char *dir){
 }
 
 
-
-
 void isFile(char *name){
         int ret =0;
 
         struct stat sb;
-        ret = stat(name,&sb);   //sb是一个传出参数 传出一个stat struct 拿来判断文件类型
+
+        //int stat(const char *pathname, struct stat *statbuf);Q
+		ret = stat(name,&sb);   //sb是一个传出参数 传出一个stat struct 拿来判断文件类型
         if(ret == -1){
             perror("stat error\n");
                 return;
@@ -58,13 +65,17 @@ void isFile(char *name){
 
 
 
-
 int main(int argc ,char *argv[]){
 
-    if(argc == 1){
+	//argc 表示接受的命令参数个数,==1只有一个执行参数./ls-R 
+	//没有无后续文件名/目录名参数，故默认当前路径
+    //argv 表示传入的命令内容 如./ls-R , dirName , fileName
+	if(argc == 1){
         isFile("."); //默认当前路径
     }else{          
         isFile(argv[1]);  //可能给的是一个普通文件
+		//while(--argc > 0) //可以一次查询多个目录
+		//isFile(*++argv);
     }
 
 return 0;
